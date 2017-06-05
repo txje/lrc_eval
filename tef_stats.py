@@ -124,7 +124,8 @@ def main(unc, cor, fa, sorted=False, verbose=False):
     uncor_data = uncor_line.strip().split(' ')
     #uncor_fields = [int(a) for a in uncor_data[1:]]
 
-    while cor_line is not None and uncor_line is not None:
+    while len(cor_line) > 0 and len(uncor_line) > 0:
+
       if cor_data[0] == uncor_data[0]:
         n = cor_data[0]
         #co = [cor_fields[i:i+4] for i in xrange(1, len(cor_fields), 4)]

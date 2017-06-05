@@ -226,11 +226,12 @@ def iter_m5(m5_file, length_threshold, alignment_threshold, edge_dist_threshold,
     if line[0] == '#': # comment
       continue
     data = line.strip().split()
-    if template_name == None:
+    if template_name is None or template_name != data[primary_index]:
+      if template_name is not None:
+        yield (template_name, alignments)
       template_name = data[primary_index]
-    if template_name != data[primary_index]:
-      yield (template_name, alignments)
-      template_name = data[primary_index]
+      if '/' in template_name:
+        template_name = template_name[:template_name.rindex('/')]
       alignments = []
 
     # get and fix query name (blasr appends '/start_end' to aligned query names)
