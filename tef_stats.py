@@ -1,3 +1,4 @@
+import sys
 import argparse
 import fasta
 
@@ -160,13 +161,15 @@ def main(unc, cor, fa, sorted=False, verbose=False):
       if uncor_data[0] <= cor_data[0]:
         unc_aligned += 1
         uncor_line = uncor_in.readline()
-        uncor_data = uncor_line.strip().split(' ')
+        if len(uncor_line) > 0:
+          uncor_data = uncor_line.strip().split(' ')
         #uncor_fields = [int(a) for a in uncor_data[1:]]
 
       else: #if cor_data[0] < uncor_data[0]:
         cor_aligned += 1
         cor_line = cor_in.readline()
-        cor_data = cor_line.strip().split(' ')
+        if len(cor_line) > 0:
+          cor_data = cor_line.strip().split(' ')
         #cor_fields = [int(a) for a in cor_data[1:]]
 
 
@@ -181,9 +184,12 @@ def main(unc, cor, fa, sorted=False, verbose=False):
     cor_in.close()
     uncor_in.close()
 
+  if tp + fn == 0:
+    raise Exception("No read names matched (uncor: {}, cor: {})".format(uncor_data[0], cor_data[0]))
+
   gain = float(tp - fp) / (tp + fn)
 
-  print "Sample\tMethod\tUncorrected reads\tCorrected reads\tRead gain/loss\tTP\tFP\tTN\tFN\tGain\tSensitivity\tSpecificity"
+  print "Sample\tMethod\tUncorrected reads\tCorrected reads\tRead gain/loss\tTP\tFP\tTN\tFN\tSensitivity\tSpecificity\tGain"
   print "%s\t%s\t%i\t%i\t%i\t%i\t%i\t%i\t%i\t%.4f\t%.4f\t%.4f" % (fa, cor, unc_aligned, cor_aligned, (cor_aligned-unc_aligned), tp, fp, tn, fn, (float(tp)/(tp + fn)), (float(tn)/(tn + fp)), gain)
 
   '''

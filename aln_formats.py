@@ -215,7 +215,7 @@ class Contig:
 # 10  score numMatch numMismatch numIns numDel
 # 15  mapQV qAlignedSeq matchPattern tAlignedSeq
 
-def iter_m5(m5_file, length_threshold, alignment_threshold, edge_dist_threshold, by_query=False):
+def iter_m5(m5_file, length_threshold, alignment_threshold, edge_dist_threshold, by_query=False, trim_suffix=False):
   if by_query:
     primary_index = 0
   else:
@@ -230,13 +230,13 @@ def iter_m5(m5_file, length_threshold, alignment_threshold, edge_dist_threshold,
       if template_name is not None:
         yield (template_name, alignments)
       template_name = data[primary_index]
-      if '/' in template_name:
+      if by_query and '/' in template_name and trim_suffix:
         template_name = template_name[:template_name.rindex('/')]
       alignments = []
 
     # get and fix query name (blasr appends '/start_end' to aligned query names)
     query_name = data[0]
-    if '/' in query_name:
+    if '/' in query_name and trim_suffix:
       query_name = query_name[:query_name.rindex('/')]
 
     query = AlignmentRead(query_name, int(data[1]), int(data[2]), int(data[3]), data[4] == '-', data[16])
