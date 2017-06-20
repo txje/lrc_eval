@@ -25,8 +25,22 @@ Utilities:
   * converts MAF to TEF format
 * sam2tef.py
   * converts SAM to TEF format
+* m52tef.py
+  * converts BLASR -m5 format to TEF format
+* remap_m5.py
+  * rewrites the read names in a FASTA file according to the renaming scheme for several long read error correction methods
+  * it's easier to compare post- to pre-corrected sequences if the names are consistent...
 
+Plumbing:
+* fasta.py
+  * A very simple FASTA file API
+* aln_formats.py
+  * Provides a common API to parse and iterate through alignment formats, including MAF, m4, and m5
 
-Evaluation:
-* tef\_stats.py
-  * Computes error correction statistics given uncorrected and corrected TEF files
+Statistics can be computed directly from several alignment formats, with slightly different capabilities:
+* tef_stats.py
+  * Computes error correction statistics given uncorrected and corrected TEF files, in line with original ECET
+* maf_stats.py
+* m5_stats.py
+  * THIS IS THE RECOMMENDED METHOD and the method used in the FMLRC paper
+  * Statistics are computed directly from -m5 format, allowing BLASR results to be used directly and loci compared relative to the reference sequence
